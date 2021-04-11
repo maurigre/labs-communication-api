@@ -6,6 +6,7 @@ services:
     container_name: mysql-labs-communication
     restart: always
     environment:
+      TZ: "America/Sao_Paulo"
       MYSQL_DATABASE: ${MGR_MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MGR_MYSQL_ROOT_PASSWORD}
       MYSQL_USER: ${MGR_MYSQL_USER}
@@ -31,8 +32,9 @@ services:
       context: .
     image: mgr/labs-communication-api
     container_name: labs-communication-api
-    restart: always
+    restart: on-failure
     environment:
+      TZ: "America/Sao_Paulo"
       SPRING_MYSQL_DATABASE: ${MGR_MYSQL_DATABASE}
       SPRING_DATASOURCE_USERNAME: ${MGR_MYSQL_USER}
       SPRING_DATASOURCE_PASSWORD: ${MGR_MYSQL_PASSWORD}

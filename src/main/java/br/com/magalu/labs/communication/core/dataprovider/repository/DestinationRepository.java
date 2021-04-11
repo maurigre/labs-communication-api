@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface DestinationRepository extends JpaRepository<Destination, Long> {
 
-    Optional<Destination> findByDestination(String recipient);
+    Optional<Destination> findByDestiny(String destiny);
 }

@@ -4,9 +4,9 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 CREATE SCHEMA IF NOT EXISTS `labs_communication_db` DEFAULT CHARACTER SET utf8 ;
 
-CREATE TABLE IF NOT EXISTS labs_communication_db.recipients (
+CREATE TABLE IF NOT EXISTS labs_communication_db.destinations (
     id BIGINT(20) NOT NULL AUTO_INCREMENT,
-    recipient varchar(255) NOT NULL,
+    destiny varchar(255) NOT NULL,
     PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -17,13 +17,13 @@ CREATE TABLE IF NOT EXISTS labs_communication_db.messages (
     message VARCHAR(255) NOT NULL,
     message_state VARCHAR(10) NOT NULL,
     message_type varchar(10) NOT NULL,
-    id_recipient bigint NOT NULL,
+    id_destination BIGINT(20) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP ,
     modified_at DATETIME NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT messages_recipients_id_fk
-        FOREIGN KEY (id_recipient)
-        REFERENCES labs_communication_db.recipients (id))
+    CONSTRAINT messages_destinations_id_fk
+        FOREIGN KEY (id_destination)
+        REFERENCES labs_communication_db.destinations (id))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 

@@ -14,7 +14,7 @@ spring:
     artifact-id: @project.artifactId@
 
   datasource:
-    url: "jdbc:mysql://mysqldb:3306/${SPRING_MYSQL_DATABASE}"
+    url: jdbc:mysql://mysqldb:3306/${SPRING_MYSQL_DATABASE}?autoReconnect=true&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   rabbitmq:

@@ -14,28 +14,18 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS labs_communication_db.messages (
     id BIGINT(20) NOT NULL AUTO_INCREMENT,
     date_time_schedule TIMESTAMP NOT NULL,
-    message blob NOT NULL,
+    message VARCHAR(255) NOT NULL,
     message_state VARCHAR(10) NOT NULL,
     message_type varchar(10) NOT NULL,
     id_recipient bigint NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
-    modified_at TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP ,
+    modified_at DATETIME NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT messages_recipients_id_fk
         FOREIGN KEY (id_recipient)
         REFERENCES labs_communication_db.recipients (id))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-
-
- CREATE TABLE `ttt` (
-  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `t1` TIMESTAMP  NULL DEFAULT '0000-00-00 00:00:00',
-  `t2` TIMESTAMP  NULL DEFAULT '0000-00-00 00:00:00',
-  `t3` TIMESTAMP  NULL DEFAULT '0000-00-00 00:00:00',
-  `t4` TIMESTAMP  NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

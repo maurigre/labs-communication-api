@@ -1,0 +1,39 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  profiles:
+    active: prod
+
+  application:
+    version: @project.version@
+    name: @project.name@
+    description: @project.description@
+    artifact-id: @project.artifactId@
+
+  datasource:
+    url: "jdbc:mysql://mysqldb:3306/${SPRING_MYSQL_DATABASE}"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  rabbitmq:
+    request:
+      host: localhost
+      port: 5672
+      username: guest
+      password: guest
+      virtual-host: vhost_rabbit
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    validate-on-migrate: false

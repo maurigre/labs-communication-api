@@ -23,8 +23,14 @@ spring:
       port: 5672
       username: guest
       password: guest
-      virtual-host: vhost_rabbit
-
+      queue:
+        producer: qu.producer.message
+      exchange:
+        producer: ex.producer.message
+      routing-key:
+        producer: rk.producer.message
+      dead-letter:
+        producer: dl.producer.message
   jpa:
     hibernate:
       ddl-auto: validate

@@ -11,6 +11,21 @@ spring:
     password: ""
     driver-class-name: org.h2.Driver
 
+  rabbitmq:
+    request:
+      host: localhost
+      port: 5672
+      username: guest
+      password: guest
+      queue:
+        producer: qu.producer.message
+      exchange:
+        producer: ex.producer.message
+      routing-key:
+        producer: rk.producer.message
+      dead-letter:
+        producer: dl.producer.message
+
   jpa:
     hibernate:
       ddl-auto: update

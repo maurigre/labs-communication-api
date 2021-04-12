@@ -13,17 +13,20 @@ services:
       MYSQL_PASSWORD: ${MGR_MYSQL_PASSWORD}
     networks:
       - mgr-network
-  rabbit:
-    image: rabbitmq:3-management
+  rabbitmq:
     container_name: rabbitmq-labs-communication
-    restart: always
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-      RABBITMQ_DEFAULT_VHOST: vhost_rabbit
+    image: rabbitmq:3-management
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "rabbitmq", "5672" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    expose:
+      - 15672
+      - 5672
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - 15672:15672
+      - 5672:5672
     networks:
       - mgr-network
   labs_communication_api:
@@ -33,16 +36,24 @@ services:
     image: mgr/labs-communication-api
     container_name: labs-communication-api
     restart: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     environment:
       TZ: "America/Sao_Paulo"
       SPRING_MYSQL_DATABASE: ${MGR_MYSQL_DATABASE}
       SPRING_DATASOURCE_USERNAME: ${MGR_MYSQL_USER}
       SPRING_DATASOURCE_PASSWORD: ${MGR_MYSQL_PASSWORD}
+      SPRING_RABBITMQ_ADDRESSES: amqp://guest:guest@rabbitmq:5672/
+    links:
+      - rabbitmq:rabbitmq
     ports:
       - "8080:8080"
     depends_on:
       - mysqldb
-      - rabbit
+      - rabbitmq
     networks:
       - mgr-network
 

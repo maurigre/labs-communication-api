@@ -1,4 +1,4 @@
-package br.com.magalu.labs.communication.core.dataprovider.model;
+package br.com.magalu.labs.communication.core.model;
 
 
 import lombok.*;
@@ -6,7 +6,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.math.BigInteger;
 
 @Getter
 @Builder

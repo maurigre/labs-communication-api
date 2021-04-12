@@ -1,24 +1,26 @@
 package br.com.magalu.labs.communication.core.service.destination.imp;
 
 
-import br.com.magalu.labs.communication.core.dataprovider.model.Destination;
-import br.com.magalu.labs.communication.core.dataprovider.repository.DestinationRepository;
+import br.com.magalu.labs.communication.core.model.Destination;
+import br.com.magalu.labs.communication.core.repository.DestinationRepository;
 import br.com.magalu.labs.communication.core.service.destination.DestinationService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
-@Transactional
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class DestinationServiceImp implements DestinationService {
+
 
     DestinationRepository destinationRepository;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Optional<Destination> save(String destiny) {
         return destinationRepository.findByDestiny(destiny)
                 .or(() -> Optional.of(

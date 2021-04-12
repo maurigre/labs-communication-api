@@ -1,4 +1,4 @@
-package br.com.magalu.labs.communication.core.dataprovider.model;
+package br.com.magalu.labs.communication.core.model;
 
 
 import lombok.*;

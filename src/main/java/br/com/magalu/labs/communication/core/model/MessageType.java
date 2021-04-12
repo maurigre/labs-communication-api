@@ -1,4 +1,4 @@
-package br.com.magalu.labs.communication.core.dataprovider.enums;
+package br.com.magalu.labs.communication.core.model;
 
 
 public enum MessageType {

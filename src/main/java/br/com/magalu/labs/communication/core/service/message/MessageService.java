@@ -1,6 +1,6 @@
 package br.com.magalu.labs.communication.core.service.message;
 
-import br.com.magalu.labs.communication.core.dataprovider.model.Message;
+import br.com.magalu.labs.communication.core.model.Message;
 
 import java.util.List;
 import java.util.Optional;

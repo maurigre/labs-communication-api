@@ -2,16 +2,14 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-CREATE SCHEMA IF NOT EXISTS `labs_communication_db` DEFAULT CHARACTER SET utf8 ;
-
-CREATE TABLE IF NOT EXISTS labs_communication_db.destinations (
+CREATE TABLE IF NOT EXISTS destinations (
     id BIGINT(20) NOT NULL AUTO_INCREMENT,
     destiny varchar(255) NOT NULL,
     PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS labs_communication_db.messages (
+CREATE TABLE IF NOT EXISTS messages (
     id BIGINT(20) NOT NULL AUTO_INCREMENT,
     date_time_schedule TIMESTAMP NOT NULL,
     message VARCHAR(255) NOT NULL,
@@ -23,7 +21,7 @@ CREATE TABLE IF NOT EXISTS labs_communication_db.messages (
     PRIMARY KEY (`id`),
     CONSTRAINT messages_destinations_id_fk
         FOREIGN KEY (id_destination)
-        REFERENCES labs_communication_db.destinations (id))
+        REFERENCES destinations (id))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 

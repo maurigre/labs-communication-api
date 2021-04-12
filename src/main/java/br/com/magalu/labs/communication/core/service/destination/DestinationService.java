@@ -1,6 +1,6 @@
 package br.com.magalu.labs.communication.core.service.destination;
 
-import br.com.magalu.labs.communication.core.dataprovider.model.Destination;
+import br.com.magalu.labs.communication.core.model.Destination;
 
 import java.util.Optional;
 

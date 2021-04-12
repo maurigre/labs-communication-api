@@ -1,17 +1,12 @@
 package br.com.magalu.labs.communication.controller.v1.dto;
 
-import br.com.magalu.labs.communication.core.dataprovider.enums.MessageType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
-@ToString
-@EqualsAndHashCode
 public class MessageDto {
 
     @NotNull(message = "Data hora não pode ser null")

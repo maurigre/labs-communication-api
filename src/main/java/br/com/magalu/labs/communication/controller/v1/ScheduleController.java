@@ -14,8 +14,8 @@ public class ScheduleController {
     static final String VERSION = "/v1";
     static final String PATH = VERSION + "/schedules";
 
-    MessageService messageService;
-    RabbitMqService rabbitMqService;
+    private final MessageService messageService;
+    private final RabbitMqService rabbitMqService;
 
     @GetMapping
     public String findAllSchedules() {

@@ -1,8 +1,6 @@
 package br.com.magalu.labs.communication.core.dataprovider.model;
 
 
-import br.com.magalu.labs.communication.core.dataprovider.enums.MessageState;
-import br.com.magalu.labs.communication.core.dataprovider.enums.MessageType;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.ColumnDefault;

@@ -31,6 +31,7 @@ public class ProducerConfiguration {
     @Value("${spring.rabbitmq.request.dead-letter.producer}")
     private String deadLetter;
 
+
     @Bean
     DirectExchange exchange(){
         return new DirectExchange(exchange);
@@ -40,6 +41,7 @@ public class ProducerConfiguration {
     Queue deadLetter(){
         return new Queue(deadLetter);
     }
+
 
     @Bean
     Queue queue(){

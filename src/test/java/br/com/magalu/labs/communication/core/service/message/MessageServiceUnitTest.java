@@ -1,6 +1,7 @@
 package br.com.magalu.labs.communication.core.service.message;
 
 
+import br.com.magalu.labs.communication.core.exception.MessageValidException;
 import br.com.magalu.labs.communication.core.model.Destination;
 import br.com.magalu.labs.communication.core.model.Message;
 import br.com.magalu.labs.communication.core.model.MessageState;
@@ -8,6 +9,7 @@ import br.com.magalu.labs.communication.core.model.MessageType;
 import br.com.magalu.labs.communication.core.repository.MessageRepository;
 import br.com.magalu.labs.communication.core.service.destination.DestinationService;
 import br.com.magalu.labs.communication.core.service.message.imp.MessageServiceImp;
+import br.com.magalu.labs.communication.core.service.validation.MessageValidationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -27,6 +29,7 @@ public class MessageServiceUnitTest {
     MessageService messageService;
     DestinationService destinationService;
     MessageRepository messageRepository;
+    MessageValidationService messageValidationService;
 
     final Long ID = 2L;
 
@@ -34,11 +37,12 @@ public class MessageServiceUnitTest {
     void setUp() {
         this.messageRepository = spy(MessageRepository.class);
         this.destinationService = mock(DestinationService.class);
-        this.messageService = new MessageServiceImp(this.messageRepository, this.destinationService);
+        this.messageValidationService = mock(MessageValidationService.class);
+        this.messageService = new MessageServiceImp(this.messageRepository, this.destinationService, this.messageValidationService);
     }
 
     @Test
-    void shouldSaveMessageAndReturnId(){
+    void shouldSaveMessageAndReturnId() throws MessageValidException {
         BDDMockito.given(messageRepository.save(Mockito.any(Message.class)))
                 .willReturn(getMockMessage2());
 

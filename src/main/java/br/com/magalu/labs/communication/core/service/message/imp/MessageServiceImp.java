@@ -1,10 +1,12 @@
 package br.com.magalu.labs.communication.core.service.message.imp;
 
-import br.com.magalu.labs.communication.core.model.MessageState;
+import br.com.magalu.labs.communication.core.exception.MessageValidException;
 import br.com.magalu.labs.communication.core.model.Message;
+import br.com.magalu.labs.communication.core.model.MessageState;
 import br.com.magalu.labs.communication.core.repository.MessageRepository;
 import br.com.magalu.labs.communication.core.service.destination.DestinationService;
 import br.com.magalu.labs.communication.core.service.message.MessageService;
+import br.com.magalu.labs.communication.core.service.validation.MessageValidationService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +20,15 @@ import java.util.Optional;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class MessageServiceImp implements MessageService {
 
-    MessageRepository messageRepository;
-    DestinationService destinationService;
+    private final MessageRepository messageRepository;
+    private final DestinationService destinationService;
+    private final MessageValidationService messageValidationService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Optional<Message> save(Message message) {
+    public Optional<Message> save(Message message) throws MessageValidException {
         message.setMessageState(MessageState.SCHEDULED);
+        messageValidationService.isValidate(message);
         return destinationService.save(message.getDestination().getDestiny())
                 .map(destination -> message.setDestination(destination))
                 .map(messageRepository::save);

@@ -18,7 +18,8 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 public class RabbitConfiguration {
 
 
-    ConnectionFactory connectionFactory;
+    private final ConnectionFactory connectionFactory;
+    private final ProducerConfiguration producerConfiguration;
 
     @Bean
     Jackson2JsonMessageConverter jsonMessageConverter(){
@@ -34,8 +35,11 @@ public class RabbitConfiguration {
     public RabbitTemplate rabbitTemplate(){
         final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jsonMessageConverter());
+        rabbitTemplate.setExchange(producerConfiguration.getExchange());
+        rabbitTemplate.setRoutingKey(producerConfiguration.getRouting());
         return rabbitTemplate;
     }
+
 
     @Bean
     public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(){

@@ -1,5 +1,6 @@
 package br.com.magalu.labs.communication.config.swagger;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Configuration
 @EnableSwagger2
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class SwaggerConfiguration {
 
     private final static String EMAIL = "maurigre@gmail.com";
@@ -32,13 +34,7 @@ public class SwaggerConfiguration {
     private final static String URL_TERMS_OF_SERVICE = "Terms of Service";
     private final static String LICENCE_URL = SITE;
 
-   private BuildProperties build;
-
-
-    @Autowired
-    public SwaggerConfiguration(BuildProperties build) {
-        this.build = build;
-    }
+    private final BuildProperties build;
 
     @Bean
     public LinkDiscoverers discoverers() {

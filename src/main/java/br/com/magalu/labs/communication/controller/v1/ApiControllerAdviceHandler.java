@@ -1,8 +1,9 @@
-package br.com.magalu.labs.communication.exception;
+package br.com.magalu.labs.communication.controller.v1;
 
 import br.com.magalu.labs.communication.controller.v1.dto.response.ResponseError;
 import br.com.magalu.labs.communication.controller.v1.dto.response.ResponseErrorValid;
 import br.com.magalu.labs.communication.controller.v1.dto.response.ResponseErrorValidField;
+import br.com.magalu.labs.communication.core.exception.MessageValidException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 
 
 @RestControllerAdvice
-public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+public class ApiControllerAdviceHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -75,6 +76,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ResponseError errors = getResponseError(ex, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler({
+            MessageValidException.class
+    })
+    public ResponseEntity<ResponseError> customHandleValidateMessage(MessageValidException ex) {
+        System.out.println("TESTE");
+        ResponseError errors = ex.getErrorValid();
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+
 
     private ResponseError getResponseError(Exception ex, HttpStatus status) {
         return ResponseError.builder()

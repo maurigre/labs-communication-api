@@ -17,7 +17,7 @@ import java.util.Optional;
 public class DestinationServiceImp implements DestinationService {
 
 
-    DestinationRepository destinationRepository;
+    private final DestinationRepository destinationRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)

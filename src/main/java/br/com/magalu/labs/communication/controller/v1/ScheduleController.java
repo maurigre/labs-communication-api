@@ -3,10 +3,10 @@ package br.com.magalu.labs.communication.controller.v1;
 import br.com.magalu.labs.communication.controller.v1.dto.mapper.MessageMapper;
 import br.com.magalu.labs.communication.controller.v1.dto.message.MessageDto;
 import br.com.magalu.labs.communication.controller.v1.dto.response.Response;
+import br.com.magalu.labs.communication.core.exception.MessageValidException;
 import br.com.magalu.labs.communication.core.model.Message;
 import br.com.magalu.labs.communication.core.service.message.MessageService;
-import br.com.magalu.labs.communication.service.rabbitmq.RabbitMqService;
-import br.com.magalu.labs.communication.validations.MessageValidation;
+import br.com.magalu.labs.communication.core.service.rabbitmq.RabbitMqService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,8 +41,7 @@ public class ScheduleController {
         messageService.findAll().stream()
                 .forEach(message -> {
                     MessageDto dto = MessageMapper.messageToDto(message);
-                    dto.add(linkTo(methodOn(ScheduleController.class).findById(message.getId()))
-                                    .withSelfRel().expand());
+                    createSelfLink(dto, message.getId());
                     messageDtos.add(dto);
                 });
         Response<List<MessageDto>> response = new Response<>();
@@ -57,34 +56,38 @@ public class ScheduleController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Response<MessageDto> response = new Response<>();
-        response.setData(MessageMapper.messageToDto(messageOptional.get()));
+        MessageDto dto = MessageMapper.messageToDto(messageOptional.get());
+        createSelfLink(dto, id);
+        response.setData(dto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object>  create(@RequestBody @Valid MessageDto messageDto) {
+    public ResponseEntity<Object>  create(@RequestBody @Valid MessageDto messageDto) throws MessageValidException {
         Response<MessageDto> response = new Response<>();
-        final MessageValidation messageValidation = new MessageValidation(messageDto);
-        if (!messageValidation.haveNoErrors()) {
-            return new ResponseEntity<>(messageValidation.getErrorValid(), HttpStatus.BAD_REQUEST);
-        }
         final Message message = messageService.save(DtoToMessage(messageDto)).get();
         MessageDto dto = MessageMapper.messageToDto(message);
-        dto.add(linkTo(methodOn(ScheduleController.class).findById(message.getId())).withSelfRel().expand());
-
+        createSelfLink(dto, message.getId());
+        rabbitMqService.producer(message);
         response.setData(dto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Response<?>> delete(@PathVariable Long id) {
         Response<?> response = new Response<>();
-        final Optional<Message> messageOptional = messageService.findById(id);
+        Optional<Message> messageOptional = messageService.deleteById(id);
         if (!messageOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        messageService.deleteById(messageOptional.get().getId());
         return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+    }
+
+    private void createSelfLink(MessageDto dto, Long id) {
+        dto.add(linkTo(methodOn(ScheduleController.class).findAllSchedules()).withRel("List Scheduler"));
+        dto.add(linkTo(methodOn(ScheduleController.class).findById(id)).withRel("Scheduler"));
+        dto.add(linkTo(methodOn(ScheduleController.class).delete(id)).withRel("Delete Scheduler"));
     }
 
 }

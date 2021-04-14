@@ -3,12 +3,12 @@ package br.com.magalu.labs.communication.controller.v1;
 import br.com.magalu.labs.communication.controller.v1.dto.response.ResponseError;
 import br.com.magalu.labs.communication.controller.v1.dto.response.ResponseErrorValid;
 import br.com.magalu.labs.communication.controller.v1.dto.response.ResponseErrorValidField;
-import br.com.magalu.labs.communication.core.exception.MessageValidException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -77,17 +77,6 @@ public class ApiControllerAdviceHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({
-            MessageValidException.class
-    })
-    public ResponseEntity<ResponseError> customHandleValidateMessage(MessageValidException ex) {
-        System.out.println("TESTE");
-        ResponseError errors = ex.getErrorValid();
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
-
-
-
     private ResponseError getResponseError(Exception ex, HttpStatus status) {
         return ResponseError.builder()
                 .timestamp(LocalDateTime.now())
@@ -109,8 +98,19 @@ public class ApiControllerAdviceHandler extends ResponseEntityExceptionHandler {
     }
 
     private List<ResponseErrorValidField> getErrorsValidFields(BindException ex) {
-        return ex.getBindingResult().getFieldErrors().stream()
-                .map(error -> new ResponseErrorValidField(error.getDefaultMessage(), error.getField(), error.getRejectedValue()))
+        return ex.getBindingResult().getAllErrors().stream()
+                .map(error -> {
+                    String name = error.getObjectName();
+                    Object valueRejected =  "";
+                        if(error instanceof FieldError ){
+                            name = ((FieldError) error).getField();
+                            valueRejected = ((FieldError) error).getRejectedValue();
+                        } else if(error.getDefaultMessage().contains("type")
+                                && error.getDefaultMessage().contains("destiny")) {
+                            name = "type";
+                        }
+                       return new ResponseErrorValidField(error.getDefaultMessage(), name, valueRejected);
+                })
                 .collect(Collectors.toList());
     }
 }

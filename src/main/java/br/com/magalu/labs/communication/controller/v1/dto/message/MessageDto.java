@@ -1,5 +1,7 @@
 package br.com.magalu.labs.communication.controller.v1.dto.message;
 
+import br.com.magalu.labs.communication.core.validation.DateTimeMessage;
+import br.com.magalu.labs.communication.core.validation.ValidateTypeMessageForDestiny;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
@@ -11,13 +13,12 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@ValidateTypeMessageForDestiny(valueFieldType="type", valueFieldDestiny="destiny")
 public class MessageDto extends RepresentationModel<MessageDto> {
 
+    @DateTimeMessage
     @NotNull(message = "Data hora não pode ser null")
-//    @JsonSerialize(using = ToStringSerializer.class)
-//    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", locale = "en-US", timezone = "Brazil/East")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC-3")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC-3")
     private LocalDateTime dateTime;
 
     @NotNull(message = "Destino não pode ser null")

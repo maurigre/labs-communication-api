@@ -1,12 +1,14 @@
 package br.com.magalu.labs.communication.core.service.message.imp;
 
-import br.com.magalu.labs.communication.core.exception.MessageValidException;
+import br.com.magalu.labs.communication.core.exception.CreateMessageFailException;
+import br.com.magalu.labs.communication.core.exception.DelectedMessageFailException;
+import br.com.magalu.labs.communication.core.exception.NotFoundMessageException;
 import br.com.magalu.labs.communication.core.model.Message;
 import br.com.magalu.labs.communication.core.model.MessageState;
 import br.com.magalu.labs.communication.core.repository.MessageRepository;
 import br.com.magalu.labs.communication.core.service.destination.DestinationService;
 import br.com.magalu.labs.communication.core.service.message.MessageService;
-import br.com.magalu.labs.communication.core.service.validation.MessageValidationService;
+import br.com.magalu.labs.communication.core.service.rabbitmq.RabbitMqService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,30 +24,40 @@ public class MessageServiceImp implements MessageService {
 
     private final MessageRepository messageRepository;
     private final DestinationService destinationService;
-    private final MessageValidationService messageValidationService;
+    private final RabbitMqService rabbitMqService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Optional<Message> save(Message message) throws MessageValidException {
-        message.setMessageState(MessageState.SCHEDULED);
-        messageValidationService.isValidate(message);
-        return destinationService.save(message.getDestination().getDestiny())
-                .map(destination -> message.setDestination(destination))
-                .map(messageRepository::save);
+    public Message create(Message message) {
+        final Optional<Message> messageCreated =
+                destinationService.create(message.getDestination().getDestiny())
+                        .map(destination -> message.setDestination(destination))
+                        .map(message1 -> message1.setMessageState(MessageState.SCHEDULED))
+                        .map(messageRepository::save);
+        messageCreated.ifPresent(rabbitMqService::producer);
+        if (messageCreated.isPresent()) {
+            return messageCreated.get();
+        } else throw new CreateMessageFailException();
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Optional<Message> deleteById(Long id) {
-        return messageRepository.findById(id)
+    public void deleteById(Long id) {
+        final Optional<Message> messageOptional = messageRepository.findById(id)
                 .map(message -> message.setMessageState(MessageState.DELETED))
                 .map(messageRepository::save);
+        messageOptional.ifPresent(rabbitMqService::producer);
+        if(!messageOptional.isPresent())
+            throw new DelectedMessageFailException(id);
     }
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public Optional<Message> findById(Long id) {
-        return messageRepository.findById(id);
+    public Message findById(Long id) {
+       final Optional<Message> message = messageRepository.findById(id);
+        if(message.isPresent()) {
+            return message.get();
+        } else throw new NotFoundMessageException(id);
     }
 
     @Override

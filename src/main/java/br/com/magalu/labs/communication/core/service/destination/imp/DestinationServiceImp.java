@@ -21,7 +21,7 @@ public class DestinationServiceImp implements DestinationService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Optional<Destination> save(String destiny) {
+    public Optional<Destination> create(String destiny) {
         return destinationRepository.findByDestiny(destiny)
                 .or(() -> Optional.of(
                         destinationRepository.save(newInstanceRecipient(destiny))

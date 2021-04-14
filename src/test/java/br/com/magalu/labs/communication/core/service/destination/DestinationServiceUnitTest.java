@@ -35,7 +35,7 @@ public class DestinationServiceUnitTest {
         BDDMockito.given(destinationRepository.save(Mockito.any(Destination.class)))
                 .willReturn(getMockDestination());
 
-        Optional<Destination> destination = destinationService.save("");
+        Optional<Destination> destination = destinationService.create("");
 
         assertTrue(destination.isPresent());
         assertEquals(DESTINY, destination.get().getDestiny());

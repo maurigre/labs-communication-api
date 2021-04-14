@@ -1,7 +1,6 @@
 package br.com.magalu.labs.communication.core.service.message;
 
 
-import br.com.magalu.labs.communication.core.exception.MessageValidException;
 import br.com.magalu.labs.communication.core.model.Destination;
 import br.com.magalu.labs.communication.core.model.Message;
 import br.com.magalu.labs.communication.core.model.MessageState;
@@ -9,7 +8,7 @@ import br.com.magalu.labs.communication.core.model.MessageType;
 import br.com.magalu.labs.communication.core.repository.MessageRepository;
 import br.com.magalu.labs.communication.core.service.destination.DestinationService;
 import br.com.magalu.labs.communication.core.service.message.imp.MessageServiceImp;
-import br.com.magalu.labs.communication.core.service.validation.MessageValidationService;
+import br.com.magalu.labs.communication.core.service.rabbitmq.RabbitMqService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -19,8 +18,7 @@ import org.mockito.Mockito;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -29,7 +27,7 @@ public class MessageServiceUnitTest {
     MessageService messageService;
     DestinationService destinationService;
     MessageRepository messageRepository;
-    MessageValidationService messageValidationService;
+    RabbitMqService rabbitMqService;
 
     final Long ID = 2L;
 
@@ -37,22 +35,22 @@ public class MessageServiceUnitTest {
     void setUp() {
         this.messageRepository = spy(MessageRepository.class);
         this.destinationService = mock(DestinationService.class);
-        this.messageValidationService = mock(MessageValidationService.class);
-        this.messageService = new MessageServiceImp(this.messageRepository, this.destinationService, this.messageValidationService);
+        this.rabbitMqService = mock(RabbitMqService.class);
+        this.messageService = new MessageServiceImp(this.messageRepository, this.destinationService, this.rabbitMqService);
     }
 
     @Test
-    void shouldSaveMessageAndReturnId() throws MessageValidException {
+    void shouldSaveMessageAndReturnId(){
         BDDMockito.given(messageRepository.save(Mockito.any(Message.class)))
                 .willReturn(getMockMessage2());
 
-        BDDMockito.given(destinationService.save(Mockito.any(String.class)))
+        BDDMockito.given(destinationService.create(Mockito.any(String.class)))
                 .willReturn(Optional.of(getMockMessage2().getDestination()));
 
-        Optional<Message> message = messageService.save(getMockMessage1());
+        final Message message = messageService.create(getMockMessage1());
 
-        assertTrue(message.isPresent());
-        assertEquals(ID, message.get().getId());
+        assertNotNull(message);
+        assertEquals(ID, message.getId());
     }
 
 
@@ -66,7 +64,7 @@ public class MessageServiceUnitTest {
                 .willReturn(getMockMessage1());
 
 
-        final Message message = messageService.deleteById(ID).get();
+        messageService.deleteById(ID);
         final ArgumentCaptor<Message> captor = ArgumentCaptor.forClass(Message.class);
 
         verify(this.messageRepository, times(1)).findById(ID);
@@ -75,8 +73,6 @@ public class MessageServiceUnitTest {
         assertEquals(MessageState.DELETED, captor.getValue().getMessageState());
 
     }
-
-
 
     public Message getMockMessage1(){
         Destination destination = Destination.builder()

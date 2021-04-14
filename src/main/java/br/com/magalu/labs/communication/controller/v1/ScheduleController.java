@@ -3,10 +3,9 @@ package br.com.magalu.labs.communication.controller.v1;
 import br.com.magalu.labs.communication.controller.v1.dto.mapper.MessageMapper;
 import br.com.magalu.labs.communication.controller.v1.dto.message.MessageDto;
 import br.com.magalu.labs.communication.controller.v1.dto.response.Response;
-import br.com.magalu.labs.communication.core.exception.MessageValidException;
 import br.com.magalu.labs.communication.core.model.Message;
+import br.com.magalu.labs.communication.core.model.MessageState;
 import br.com.magalu.labs.communication.core.service.message.MessageService;
-import br.com.magalu.labs.communication.core.service.rabbitmq.RabbitMqService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static br.com.magalu.labs.communication.controller.v1.dto.mapper.MessageMapper.DtoToMessage;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -33,7 +31,6 @@ public class ScheduleController {
     static final String PATH = VERSION + "/schedules";
 
     private final MessageService messageService;
-    private final RabbitMqService rabbitMqService;
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<List<MessageDto>>> findAllSchedules() {
@@ -51,43 +48,36 @@ public class ScheduleController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE, value = "/{id}")
     public ResponseEntity<Response<MessageDto>> findById(@PathVariable Long id) {
-        Optional<Message> messageOptional = messageService.findById(id);
-        if (!messageOptional.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         Response<MessageDto> response = new Response<>();
-        MessageDto dto = MessageMapper.messageToDto(messageOptional.get());
+        final Message message = messageService.findById(id);
+        MessageDto dto = MessageMapper.messageToDto(message);
         createSelfLink(dto, id);
         response.setData(dto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object>  create(@RequestBody @Valid MessageDto messageDto) throws MessageValidException {
+    public ResponseEntity<Response<MessageDto>>  create(@RequestBody @Valid MessageDto messageDto) {
         Response<MessageDto> response = new Response<>();
-        final Message message = messageService.save(DtoToMessage(messageDto)).get();
+        final Message message = messageService.create(DtoToMessage(messageDto));
         MessageDto dto = MessageMapper.messageToDto(message);
         createSelfLink(dto, message.getId());
-        rabbitMqService.producer(message);
         response.setData(dto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Response<?>> delete(@PathVariable Long id) {
-        Response<?> response = new Response<>();
-        Optional<Message> messageOptional = messageService.deleteById(id);
-        if (!messageOptional.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+    public ResponseEntity delete(@PathVariable Long id) {
+        messageService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     private void createSelfLink(MessageDto dto, Long id) {
         dto.add(linkTo(methodOn(ScheduleController.class).findAllSchedules()).withRel("List Scheduler"));
         dto.add(linkTo(methodOn(ScheduleController.class).findById(id)).withRel("Scheduler"));
-        dto.add(linkTo(methodOn(ScheduleController.class).delete(id)).withRel("Delete Scheduler"));
+        if (!dto.getState().equals(MessageState.DELETED.name()))
+            dto.add(linkTo(methodOn(ScheduleController.class).delete(id)).withRel("Delete Scheduler"));
     }
 
 }

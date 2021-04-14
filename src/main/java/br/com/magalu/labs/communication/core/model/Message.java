@@ -1,6 +1,7 @@
 package br.com.magalu.labs.communication.core.model;
 
 
+import br.com.magalu.labs.communication.core.validation.DateTimeMessage;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.ColumnDefault;
@@ -28,6 +29,7 @@ public class Message {
     private Long id;
 
     @NotNull
+    @DateTimeMessage
     private LocalDateTime dateTimeSchedule;
 
     @NotNull

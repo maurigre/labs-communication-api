@@ -53,6 +53,20 @@ public class MessageServiceUnitTest {
         assertEquals(ID, message.getId());
     }
 
+    @Test
+    void shouldSaveMessageAndReturnStateScheduled(){
+        BDDMockito.given(messageRepository.save(any(Message.class)))
+                .willReturn(getMockMessage2());
+
+        BDDMockito.given(destinationService.create(any(String.class)))
+                .willReturn(Optional.of(getMockMessage2().getDestination()));
+
+        final Message message = messageService.create(getMockMessage1());
+
+        assertNotNull(message);
+        assertEquals(MessageState.SCHEDULED, message.getMessageState());
+    }
+
 
     @Test
     void shouldDeleteMessageAndReturnMessageStateDeleted(){

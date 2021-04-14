@@ -60,6 +60,11 @@ docker-compose up -d
 > - <b>dev</b> - Profile de desenvolvimento que ira rodar na porta: `8081` e irá utilizar o banco H2 (Banco em memória).<br/>
 > - <b>prod</b> - Profile de test que ira rodar na porta: `8082` e irá utilizar o banco H2 (Banco em memória).<br/>
 
+## Api documentada com Swagger
+
+Todas as informações referente ao endpoits da API estão detalhadas no swagger. 
+Atraves da URL: 
+[`Producao`](http://localhost:8080/api-communications/swagger-ui.html), [`Desenvolvimento`](http://localhost:8081/api-communications/swagger-ui.html)   
 
 
 ## License

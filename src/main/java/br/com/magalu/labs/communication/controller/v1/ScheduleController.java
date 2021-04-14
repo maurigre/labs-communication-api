@@ -26,7 +26,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
-@RestController("ScheduleController")
+@RestController("Schedule")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping(ScheduleController.PATH)
 @Api(value = "Labs Communication API", tags = "Labs Communication API")
@@ -39,7 +39,8 @@ public class ScheduleController {
 
     @ApiOperation(value = "List all scheduled messages")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "List scheduled messages sucessFully")
+            @ApiResponse(code = 200, message = "List scheduled messages sucessFully"),
+            @ApiResponse(code = 500, message = "An exception was thrown"),
     })
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<List<MessageDto>>> findAllSchedules() {
@@ -55,6 +56,12 @@ public class ScheduleController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Get message schedulle by id")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "returned sucess schedule message"),
+            @ApiResponse(code = 404, message = "not found  schedule message"),
+            @ApiResponse(code = 500, message = "An exception was thrown"),
+    })
     @GetMapping(produces = APPLICATION_JSON_VALUE, value = "/{id}")
     public ResponseEntity<Response<MessageDto>> findById(@PathVariable Long id) {
         Response<MessageDto> response = new Response<>();
@@ -65,6 +72,12 @@ public class ScheduleController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Create schedule message")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created schedule message sucessfully"),
+            @ApiResponse(code = 400, message = "bad request schedule message"),
+            @ApiResponse(code = 500, message = "An exception was thrown"),
+    })
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<MessageDto>>  create(@RequestBody @Valid MessageDto messageDto) {
         Response<MessageDto> response = new Response<>();
@@ -75,7 +88,12 @@ public class ScheduleController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-
+    @ApiOperation(value = "Delete schedule message")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "Deleted schedule message sucessfully"),
+            @ApiResponse(code = 404, message = "not found  schedule message"),
+            @ApiResponse(code = 500, message = "An exception was thrown"),
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         messageService.deleteById(id);

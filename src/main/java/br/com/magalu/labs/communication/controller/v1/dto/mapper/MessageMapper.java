@@ -1,9 +1,9 @@
 package br.com.magalu.labs.communication.controller.v1.dto.mapper;
 
 import br.com.magalu.labs.communication.controller.v1.dto.message.MessageDto;
-import br.com.magalu.labs.communication.core.model.Destination;
-import br.com.magalu.labs.communication.core.model.Message;
-import br.com.magalu.labs.communication.core.model.MessageType;
+import br.com.magalu.labs.communication.dataprovider.model.Destination;
+import br.com.magalu.labs.communication.dataprovider.model.Message;
+import br.com.magalu.labs.communication.dataprovider.model.MessageType;
 
 public class MessageMapper {
 

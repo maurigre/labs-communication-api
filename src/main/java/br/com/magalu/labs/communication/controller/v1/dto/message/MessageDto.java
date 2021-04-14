@@ -1,7 +1,7 @@
 package br.com.magalu.labs.communication.controller.v1.dto.message;
 
-import br.com.magalu.labs.communication.core.validation.DateTimeMessage;
-import br.com.magalu.labs.communication.core.validation.ValidateTypeMessageForDestiny;
+import br.com.magalu.labs.communication.validation.DateTimeMessage;
+import br.com.magalu.labs.communication.validation.ValidateTypeMessageForDestiny;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;

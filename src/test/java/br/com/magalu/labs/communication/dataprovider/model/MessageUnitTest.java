@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MessageTest {
+public class MessageUnitTest {
 
     private final Long ID = 1L;
     private final LocalDateTime DATE_TIME_SHEDULE =

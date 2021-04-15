@@ -42,12 +42,12 @@ public class MessageServiceUnitTest {
     @Test
     void shouldSaveMessageAndReturnId(){
         BDDMockito.given(messageRepository.save(any(Message.class)))
-                .willReturn(getMockMessage2());
+                .willReturn(getMockMessageSceneryNumberTwo());
 
         BDDMockito.given(destinationService.create(any(String.class)))
-                .willReturn(Optional.of(getMockMessage2().getDestination()));
+                .willReturn(Optional.of(getMockMessageSceneryNumberTwo().getDestination()));
 
-        final Message message = messageService.create(getMockMessage1());
+        final Message message = messageService.create(getMockMessageSceneryNumberOne());
 
         assertNotNull(message);
         assertEquals(ID, message.getId());
@@ -56,12 +56,12 @@ public class MessageServiceUnitTest {
     @Test
     void shouldSaveMessageAndReturnStateScheduled(){
         BDDMockito.given(messageRepository.save(any(Message.class)))
-                .willReturn(getMockMessage2());
+                .willReturn(getMockMessageSceneryNumberTwo());
 
         BDDMockito.given(destinationService.create(any(String.class)))
-                .willReturn(Optional.of(getMockMessage2().getDestination()));
+                .willReturn(Optional.of(getMockMessageSceneryNumberTwo().getDestination()));
 
-        final Message message = messageService.create(getMockMessage1());
+        final Message message = messageService.create(getMockMessageSceneryNumberOne());
 
         assertNotNull(message);
         assertEquals(MessageState.SCHEDULED, message.getMessageState());
@@ -72,10 +72,10 @@ public class MessageServiceUnitTest {
     void shouldDeleteMessageAndReturnMessageStateDeleted(){
 
         BDDMockito.given(messageRepository.findById(ID))
-                .willReturn(Optional.of(getMockMessage1()));
+                .willReturn(Optional.of(getMockMessageSceneryNumberOne()));
 
-        BDDMockito.given(messageRepository.save(getMockMessage1()))
-                .willReturn(getMockMessage1());
+        BDDMockito.given(messageRepository.save(getMockMessageSceneryNumberOne()))
+                .willReturn(getMockMessageSceneryNumberOne());
 
 
         messageService.deleteById(ID);
@@ -88,7 +88,7 @@ public class MessageServiceUnitTest {
 
     }
 
-    public Message getMockMessage1(){
+    public Message getMockMessageSceneryNumberOne(){
         Destination destination = Destination.builder()
                 .id(1L)
                 .destiny("teste@test.com.br")
@@ -108,7 +108,7 @@ public class MessageServiceUnitTest {
 
     }
 
-    public Message getMockMessage2(){
+    public Message getMockMessageSceneryNumberTwo(){
         Destination destination = Destination.builder()
                 .id(1L)
                 .destiny("teste@test.com.br")

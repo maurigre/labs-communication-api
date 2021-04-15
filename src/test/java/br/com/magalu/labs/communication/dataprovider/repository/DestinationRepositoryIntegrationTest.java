@@ -3,6 +3,7 @@ package br.com.magalu.labs.communication.dataprovider.repository;
 
 import br.com.magalu.labs.communication.dataprovider.model.Destination;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,14 +19,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
+@TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class})
-public class DestinationRepositoryTest {
+public class DestinationRepositoryIntegrationTest {
 
     @Autowired
     DestinationRepository destinationRepository;
 
     @AfterAll
-   void tearDown() {
+    void tearDown() {
         destinationRepository.deleteAll();
     }
 
@@ -33,6 +35,7 @@ public class DestinationRepositoryTest {
     @Order(1)
     void shouldSaveDestinationAndReturnById() {
         Destination destination = Destination.builder()
+                .id(1L)
                 .destiny("teste@teste.com.br").build();
 
         Destination destinationSave = destinationRepository.save(destination);

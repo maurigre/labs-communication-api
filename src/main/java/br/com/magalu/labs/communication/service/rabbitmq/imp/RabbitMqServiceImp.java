@@ -21,6 +21,6 @@ public class RabbitMqServiceImp implements RabbitMqService {
             rabbitTemplate.convertAndSend(message);
         } catch (Exception ex){
             throw new AmqpRejectAndDontRequeueException(ex);
-        }
+       }
     }
 }

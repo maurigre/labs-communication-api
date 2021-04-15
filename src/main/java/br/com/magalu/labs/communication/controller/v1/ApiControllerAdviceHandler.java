@@ -3,6 +3,7 @@ package br.com.magalu.labs.communication.controller.v1;
 import br.com.magalu.labs.communication.controller.v1.dto.response.ResponseError;
 import br.com.magalu.labs.communication.controller.v1.dto.response.ResponseErrorValid;
 import br.com.magalu.labs.communication.controller.v1.dto.response.ResponseErrorValidField;
+import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

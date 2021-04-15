@@ -3,6 +3,10 @@ package br.com.magalu.labs.communication.controller.v1.dto.message;
 import br.com.magalu.labs.communication.validation.DateTimeMessage;
 import br.com.magalu.labs.communication.validation.ValidateTypeMessageForDestiny;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +28,9 @@ public class MessageDto extends RepresentationModel<MessageDto> {
             example = "yyyy-MM-dd'T'HH:mm:ss")
     @DateTimeMessage
     @NotNull(message = "Data hora não pode ser null")
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", locale = "en-US", timezone = "Brazil/East")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC-3")
     private LocalDateTime dateTime;
 

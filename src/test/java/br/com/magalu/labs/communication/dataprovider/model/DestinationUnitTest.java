@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DestinationTest {
+public class DestinationUnitTest {
 
     private final Long ID = 1L;
     private final String DESTINY = "teste@test.com.br";

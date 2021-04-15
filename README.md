@@ -14,6 +14,15 @@ E um projeto de plataforma de comunicação de mensagens. Tem como finalidade de
  - [`Swagger`](https://swagger.io/) - Framework para projetar, construir, documentar e usar serviços da Web RESTful.
  - [`Docker`](https://www.docker.com/) - Plataforma de virtualização 
  
+ ## Detalhes importantes
+ É necessário ter instalado na sua máquina os seguintes programas:
+
+ * A aplicação foi desenvolvida no java-jdk13. 
+ * Motor de build da aplicação e atraves do Mavem. 
+ * Aplicação de containers, neste projeto é o [Docker](https://www.docker.com), caso ele não esteja
+   instalado, siga o tutorial do próprio site: [Get Docker](https://docs.docker.com/get-docker/).
+
+ 
 ## Informações de como o projeto pode ser executado
 Primeiro passo e criar um clone deste repositorio com o comando:
 ```bash
@@ -65,6 +74,19 @@ docker-compose up -d
 Todas as informações referente ao endpoits da API estão detalhadas no swagger. 
 Atraves da URL: 
 [`Producao`](http://localhost:8080/api-communications/swagger-ui.html), [`Desenvolvimento`](http://localhost:8081/api-communications/swagger-ui.html)   
+
+## Endpoints da API
+São:
+- Para cadastro de agendamento:
+    POST http://localhost:8080/api-communications/v1/schedules
+- Para listar todos os agendamentos:
+    GET http://localhost:8080/api-communications/v1/schedules
+- Para consulta de agendamento:
+    GET http://localhost:8080/api-communications/v1/schedules/{id}
+- Para exclusão de agendamento:
+    DELETE http://localhost:8080/api-communications/v1/schedules/{id}
+
+É possível consulta-los pelo endpoint da documentação via [Swagger](http://localhost:8080/api-communications/swagger-ui.html).
 
 
 ## License

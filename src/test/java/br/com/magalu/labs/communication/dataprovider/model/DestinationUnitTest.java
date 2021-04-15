@@ -13,7 +13,6 @@ class DestinationUnitTest {
     private final String DESTINY = "teste@test.com.br";
 
     @Test
-    @Order(1)
     void shouldCreateDestinationForBuild(){
 
         Destination builDestinationd = Destination.builder()
@@ -24,7 +23,6 @@ class DestinationUnitTest {
     }
 
     @Test
-    @Order(2)
     void shouldCreateDestinationConstructorNotArguments(){
         Destination destination = new Destination();
         assertNull(destination.getId());
@@ -32,7 +30,6 @@ class DestinationUnitTest {
     }
 
     @Test
-    @Order(3)
     void shouldCreateDestinationForConstructor() {
         Destination destination = new Destination(ID, DESTINY);
         assertEquals(ID, destination.getId());
@@ -40,7 +37,6 @@ class DestinationUnitTest {
     }
 
     @Test
-    @Order(4)
     void shouldEqualsAndHashCodeDestination(){
         Destination builDestination = Destination.builder()
                 .id(ID).destiny(DESTINY).build();
@@ -51,7 +47,6 @@ class DestinationUnitTest {
     }
 
     @Test
-    @Order(5)
     void shouldDiffForEqualsAndHashCodeDestination(){
         Destination builDestination = Destination.builder()
                 .id(ID).destiny(DESTINY).build();

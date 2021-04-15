@@ -41,7 +41,6 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
-@TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class})
 class MessageServiceIntegrationTest {
 
@@ -63,7 +62,6 @@ class MessageServiceIntegrationTest {
     }
 
     @Test
-    @Order(1)
     void shouldSaveMessageAndReturnIdAndStateScheduled(){
         final Message message = messageService.create(getMockMessageSceneryNumberOneDateTimeScheduleFuture());
         assertNotNull(message);
@@ -72,15 +70,14 @@ class MessageServiceIntegrationTest {
     }
 
     @Test
-    @Order(2)
     void shouldDeleteMessageAndReturnMessageStateDeleted(){
-        messageService.deleteById(1L);
-        final Message message = messageService.findById(1L);
+        final Message messageSave = messageService.create(getMockMessageSceneryNumberOneDateTimeScheduleFuture());
+        messageService.deleteById(messageSave.getId());
+        final Message message = messageService.findById(messageSave.getId());
         assertEquals(MessageState.DELETED, message.getMessageState());
     }
 
     @Test
-    @Order(3)
     void whenValidatePastMessageToPersistDateTimeSchedulePassedReturnException(){
         assertThatThrownBy(() ->  messageService.create(getMockMessageSceneryNumberTwoDateTimeSchedulePassed()))
                 .isInstanceOf(ConstraintViolationException.class)
@@ -88,7 +85,6 @@ class MessageServiceIntegrationTest {
     }
 
     @Test
-    @Order(4)
     void shouldDeleteMessageAndReturnException(){
         assertThatThrownBy(() ->  messageService.deleteById(6L))
                 .isInstanceOf(DelectedMessageFailException.class)
@@ -96,7 +92,6 @@ class MessageServiceIntegrationTest {
     }
 
     @Test
-    @Order(5)
     void shouldMessageFindByIdAndReturnException(){
         assertThatThrownBy(() ->  messageService.findById(6L))
                 .isInstanceOf(NotFoundMessageException.class)
@@ -104,7 +99,6 @@ class MessageServiceIntegrationTest {
     }
 
     @Test
-    @Order(6)
     void shouldMessageFindAllReturnList(){
         List<Message> list = messageService.findAll();
         assertNotNull(list);

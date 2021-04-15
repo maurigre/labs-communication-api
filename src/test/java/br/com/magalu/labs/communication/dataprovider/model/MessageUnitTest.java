@@ -29,7 +29,6 @@ class MessageUnitTest {
 
 
     @Test
-    @Order(1)
     void shouldCreateMessageForBuild(){
 
         Message build = Message.builder()
@@ -55,7 +54,6 @@ class MessageUnitTest {
     }
 
     @Test
-    @Order(2)
     void shouldCreateMessageConstructorNotArguments(){
         Message message = new Message();
         assertNull(message.getId());
@@ -70,7 +68,6 @@ class MessageUnitTest {
     }
 
     @Test
-    @Order(3)
     void shouldCreateMessageForConstructor() {
         Message message = new Message(ID, DATE_TIME_SHEDULE, DESTINATION, MESSAGE,
                 MESSAGE_TYPE,MESSAGE_STATE, CREATED_AT, MODIFIED_AT);
@@ -86,7 +83,6 @@ class MessageUnitTest {
     }
 
     @Test
-    @Order(4)
     void shouldEqualsAndHashCodeMessage(){
 
         Message builder = Message.builder()
@@ -107,7 +103,6 @@ class MessageUnitTest {
     }
 
     @Test
-    @Order(5)
     void shouldDiffForEqualsAndHashCodeMessage(){
         Message builder = Message.builder()
                 .id(ID)
@@ -127,7 +122,6 @@ class MessageUnitTest {
     }
 
     @Test
-    @Order(5)
     void shouldMessageToString(){
         Message message = Message.builder()
                 .id(ID)

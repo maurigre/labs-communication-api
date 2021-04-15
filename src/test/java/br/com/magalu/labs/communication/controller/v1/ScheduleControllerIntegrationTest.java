@@ -37,7 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class})
 class ScheduleControllerIntegrationTest {
 
@@ -57,7 +56,6 @@ class ScheduleControllerIntegrationTest {
     static final String URL = "/v1/schedules";
 
     @Test
-    @Order(1)
     void shouldCreateMessageScheduleSucess() throws Exception {
         BDDMockito.given(service.create(Mockito.any(Message.class)))
                 .willReturn(getMockMessageSceneryNumberOne());
@@ -75,7 +73,6 @@ class ScheduleControllerIntegrationTest {
                 .andExpect(jsonPath("$.data.state").value(STATE));
     }
     @Test
-    @Order(2)
     public void whenCreateMessageInvalidParameterReturnBadRequestTest() throws Exception {
         BDDMockito.given(service.create(Mockito.any(Message.class)))
                 .willReturn(getMockMessageSceneryNumberOne());
@@ -93,7 +90,6 @@ class ScheduleControllerIntegrationTest {
     }
 
     @Test
-    @Order(3)
     void shouldDelectedMessageScheduleReturnNoContent() throws Exception {
         BDDMockito.given(service.create(Mockito.any(Message.class)))
                 .willReturn(getMockMessageSceneryNumberOne());
@@ -107,7 +103,6 @@ class ScheduleControllerIntegrationTest {
     }
 
     @Test
-    @Order(4)
     void shouldMessageScheduFindAllScheduleReturnSuccessCode200() throws Exception {
         BDDMockito.given(service.findAll())
                 .willReturn(List.of(getMockMessageSceneryNumberOne()));
@@ -120,7 +115,6 @@ class ScheduleControllerIntegrationTest {
     }
 
     @Test
-    @Order(5)
     void shouldMessageScheduFindByIdScheduleReturnSuccessCode200() throws Exception {
         BDDMockito.given(service.findById(1L))
                 .willReturn(getMockMessageSceneryNumberOne());

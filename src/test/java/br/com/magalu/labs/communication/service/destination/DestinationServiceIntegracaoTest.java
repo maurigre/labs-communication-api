@@ -25,7 +25,7 @@ import static org.mockito.Mockito.spy;
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class})
-public class DestinationServiceIntegracaoTest {
+class DestinationServiceIntegracaoTest {
 
     @Autowired
     DestinationService destinationService;

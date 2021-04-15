@@ -5,12 +5,19 @@ import br.com.magalu.labs.communication.dataprovider.model.Destination;
 import br.com.magalu.labs.communication.dataprovider.model.Message;
 import br.com.magalu.labs.communication.dataprovider.model.MessageState;
 import br.com.magalu.labs.communication.dataprovider.model.MessageType;
+import br.com.magalu.labs.communication.dataprovider.repository.DestinationRepository;
 import br.com.magalu.labs.communication.dataprovider.repository.MessageRepository;
+import br.com.magalu.labs.communication.exception.CreateMessageFailException;
+import br.com.magalu.labs.communication.exception.DelectedMessageFailException;
+import br.com.magalu.labs.communication.exception.NotFoundMessageException;
 import br.com.magalu.labs.communication.service.destination.DestinationService;
 import br.com.magalu.labs.communication.service.rabbitmq.RabbitMqService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.mockito.BDDMockito;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,17 +28,22 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class})
-public class MessageServiceIntegrationTest {
+class MessageServiceIntegrationTest {
 
     @Autowired
     MessageService messageService;
@@ -41,6 +53,9 @@ public class MessageServiceIntegrationTest {
 
     @Autowired
     DestinationService destinationService;
+
+    @MockBean
+    DestinationRepository destinationRepository;
 
     @MockBean
     RabbitMqService rabbitMqService;
@@ -63,7 +78,7 @@ public class MessageServiceIntegrationTest {
     @Order(2)
     void shouldDeleteMessageAndReturnMessageStateDeleted(){
         messageService.deleteById(1L);
-        final Message message = messageService.findById(1l);
+        final Message message = messageService.findById(1L);
         assertEquals(MessageState.DELETED, message.getMessageState());
     }
 
@@ -73,6 +88,29 @@ public class MessageServiceIntegrationTest {
         assertThatThrownBy(() ->  messageService.create(getMockMessageSceneryNumberTwoDateTimeSchedulePassed()))
                 .isInstanceOf(ConstraintViolationException.class)
                 .hasMessageContaining("Data do agendamento da mensagem e inválida");
+    }
+
+    @Test
+    @Order(4)
+    void shouldDeleteMessageAndReturnException(){
+        assertThatThrownBy(() ->  messageService.deleteById(6L))
+                .isInstanceOf(DelectedMessageFailException.class)
+                .hasMessageContaining("Falha ao deletar a mensagem de id: 6");
+    }
+
+    @Test
+    @Order(5)
+    void shouldMessageFindByIdAndReturnException(){
+        assertThatThrownBy(() ->  messageService.findById(6L))
+                .isInstanceOf(NotFoundMessageException.class)
+                .hasMessageContaining("Menssagem nao localizada pelo id: 6");
+    }
+
+    @Test
+    @Order(6)
+    void shouldMessageFindAllReturnList(){
+        List<Message> list = messageService.findAll();
+        assertNotNull(list);
     }
 
     public Message getMockMessageSceneryNumberOneDateTimeScheduleFuture(){

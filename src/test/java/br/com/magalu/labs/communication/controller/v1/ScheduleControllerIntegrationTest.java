@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("dev")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class})
-public class ScheduleControllerIntegrationTest {
+class ScheduleControllerIntegrationTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -91,6 +92,45 @@ public class ScheduleControllerIntegrationTest {
 
     }
 
+    @Test
+    @Order(3)
+    void shouldDelectedMessageScheduleReturnNoContent() throws Exception {
+        BDDMockito.given(service.create(Mockito.any(Message.class)))
+                .willReturn(getMockMessageSceneryNumberOne());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete(URL + "/1")
+                //.content(getJsonPayLoad(DATE_TIME_SHEDULE.toString(), MESSAGE, TYPE, DESTINY.getDestiny()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @Order(4)
+    void shouldMessageScheduFindAllScheduleReturnSuccessCode200() throws Exception {
+        BDDMockito.given(service.findAll())
+                .willReturn(List.of(getMockMessageSceneryNumberOne()));
+
+        mockMvc.perform(MockMvcRequestBuilders.get(URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    @Order(5)
+    void shouldMessageScheduFindByIdScheduleReturnSuccessCode200() throws Exception {
+        BDDMockito.given(service.findById(1L))
+                .willReturn(getMockMessageSceneryNumberOne());
+
+        mockMvc.perform(MockMvcRequestBuilders.get(URL+ "/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().is2xxSuccessful());
+    }
 
     public Message getMockMessageSceneryNumberOne(){
         return Message.builder()

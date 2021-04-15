@@ -3,7 +3,6 @@ package integracao;
 import br.com.magalu.labs.communication.CommunicationApplication;
 import br.com.magalu.labs.communication.controller.v1.dto.message.MessageDto;
 import br.com.magalu.labs.communication.dataprovider.model.Destination;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -30,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(
         webEnvironment = WebEnvironment.RANDOM_PORT,
         classes = {CommunicationApplication.class})
-public class ApiCommunicationIntegrationTest {
+class ApiCommunicationIntegrationTest {
 
 
     static final String URL_SERVER = "http://localhost:";
@@ -51,7 +50,7 @@ public class ApiCommunicationIntegrationTest {
 
     @Test
     public void shouldCreateMessageScheduleReturnCreated(){
-/*
+
         HttpEntity<MessageDto> httpEntity = new HttpEntity<>(getMockMessageDtoSceneryNumberOne());
 
         ResponseEntity<MessageDto> responseEntity = this.restTemplate.exchange(
@@ -61,10 +60,11 @@ public class ApiCommunicationIntegrationTest {
                 new ParameterizedTypeReference<MessageDto>() {
                 });
 
-        assertEquals(201, responseEntity.getStatusCodeValue());*/
+        assertEquals(201, responseEntity.getStatusCodeValue());
     }
 
     public MessageDto getMockMessageDtoSceneryNumberOne(){
+
         return MessageDto.builder()
                 .dateTime(DATE_TIME_SHEDULE)
                 .message(MESSAGE)

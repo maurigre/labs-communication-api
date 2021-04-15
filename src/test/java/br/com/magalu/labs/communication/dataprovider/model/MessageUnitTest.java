@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MessageUnitTest {
+class MessageUnitTest {
 
     private final Long ID = 1L;
     private final LocalDateTime DATE_TIME_SHEDULE =
@@ -124,6 +124,24 @@ public class MessageUnitTest {
                 MESSAGE_TYPE,MESSAGE_STATE, CREATED_AT, MODIFIED_AT);
 
         assertFalse(builder.equals(constructor));
+    }
+
+    @Test
+    @Order(5)
+    void shouldMessageToString(){
+        Message message = Message.builder()
+                .id(ID)
+                .dateTimeSchedule(DATE_TIME_SHEDULE)
+                .destination(DESTINATION)
+                .message(MESSAGE)
+                .messageType(MESSAGE_TYPE)
+                .messageState(MESSAGE_STATE)
+                .createdAt(CREATED_AT)
+                .modifiedAt(MODIFIED_AT)
+                .build();
+
+        assertEquals("Message(id=1, dateTimeSchedule=2021-04-14T17:44, destination=Destination(id=1, destiny=teste@teste.com.br), message=Mensagem de teste, messageType=EMAIL, messageState=SCHEDULED, createdAt=2021-04-14T17:44, modifiedAt=2021-04-15T18:22:01)", message.toString());
+
     }
 
 

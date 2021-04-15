@@ -55,9 +55,6 @@ class MessageServiceIntegrationTest {
     DestinationService destinationService;
 
     @MockBean
-    DestinationRepository destinationRepository;
-
-    @MockBean
     RabbitMqService rabbitMqService;
 
     @AfterAll
@@ -136,7 +133,7 @@ class MessageServiceIntegrationTest {
 
     public Message getMockMessageSceneryNumberTwoDateTimeSchedulePassed(){
         Destination destination = Destination.builder()
-                .id(2L)
+                .id(null)
                 .destiny("teste@test.com.br")
                 .build();
 

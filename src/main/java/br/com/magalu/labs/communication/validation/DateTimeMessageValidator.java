@@ -14,8 +14,7 @@ public class DateTimeMessageValidator implements ConstraintValidator<DateTimeMes
             var dateTimeScheduler = dateTimeMessage.atZone(ZoneId.systemDefault());
             var dataAtual = java.time.ZonedDateTime.now();
 
-            if (dateTimeScheduler.isBefore(dataAtual)
-                    || dateTimeScheduler.toLocalTime().isBefore(dataAtual.toLocalTime())) {
+            if (dateTimeScheduler.toLocalDateTime().isBefore(dataAtual.toLocalDateTime())) {
                 valided = false;
             }
         }

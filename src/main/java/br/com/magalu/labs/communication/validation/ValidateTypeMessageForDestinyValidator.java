@@ -34,25 +34,15 @@ public class ValidateTypeMessageForDestinyValidator
             String destiny = (String) BeanUtils.getPropertyDescriptor(objetoValidation.getClass(), valueFieldDestiny)
                     .getReadMethod().invoke(objetoValidation);
 
-            System.out.println(type);
-            System.out.println(destiny);
             if(type.equals(MessageType.EMAIL.name())) {
-                System.out.println("OLA MUNDO");
-
-                Pattern regex_email_address =
-                        compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", CASE_INSENSITIVE);
-
-                Matcher matcher = regex_email_address.matcher(destiny);
-                valided =  matcher.find();
-
+                valided =  isValidEmail(destiny);
             } else {
-                valided = compile("\\d+").matcher(destiny).matches() && (destiny.length() > 10);
+                valided = isValidNumberPhone(destiny);
             }
 
             return valided;
 
         } catch (Exception e) {
-            System.out.println(e);
             throw new ValidationException(e);
         }
     }

@@ -67,7 +67,7 @@ docker-compose up -d
 > O projeto possui 3 profile são eles:<br/> 
 > - <b>prod</b> - Profile de produção que ira rodar na porta: `8080` e irá utilizar o banco MySQL.<br/>
 > - <b>dev</b> - Profile de desenvolvimento que ira rodar na porta: `8081` e irá utilizar o banco H2 (Banco em memória).<br/>
-> - <b>prod</b> - Profile de test que ira rodar na porta: `8082` e irá utilizar o banco H2 (Banco em memória).<br/>
+> - <b>test</b> - Profile de test que ira rodar na porta: `8082` e irá utilizar o banco H2 (Banco em memória).<br/>
 
 ## Api documentada com Swagger
 

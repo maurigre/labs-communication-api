@@ -6,6 +6,7 @@ import br.com.magalu.labs.communication.dataprovider.model.Message;
 import br.com.magalu.labs.communication.dataprovider.model.MessageState;
 import br.com.magalu.labs.communication.dataprovider.model.MessageType;
 import br.com.magalu.labs.communication.dataprovider.repository.MessageRepository;
+import br.com.magalu.labs.communication.exception.CreateMessageFailException;
 import br.com.magalu.labs.communication.service.destination.DestinationService;
 import br.com.magalu.labs.communication.service.message.imp.MessageServiceImp;
 import br.com.magalu.labs.communication.service.rabbitmq.RabbitMqService;
@@ -17,8 +18,8 @@ import org.mockito.BDDMockito;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -86,6 +87,21 @@ class MessageServiceUnitTest {
 
         assertEquals(MessageState.DELETED, captor.getValue().getMessageState());
 
+    }
+
+
+    @Test
+    void shouldCreateMessageAndReturnException(){
+       // Optional option = spy(Optional.class);
+
+        BDDMockito.given(messageRepository.save(any(Message.class)))
+                .willReturn(getMockMessageSceneryNumberTwo());
+
+        BDDMockito.given(destinationService.create(any(String.class)))
+                .willReturn(Optional.empty());
+
+        assertThatThrownBy(() -> messageService.create(getMockMessageSceneryNumberOne()))
+                .isInstanceOf(CreateMessageFailException.class);
     }
 
     public Message getMockMessageSceneryNumberOne(){

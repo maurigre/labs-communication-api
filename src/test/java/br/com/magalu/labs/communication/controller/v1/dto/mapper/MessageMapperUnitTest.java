@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MessageMapperUnitTest {
 
 
+
     @Test
     void shouldReceiveMessageToMessageDto(){
         MessageDto messageDto = MessageMapper.messageToDto(getMockMessage());

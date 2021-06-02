@@ -7,6 +7,8 @@ import br.com.magalu.labs.communication.dataprovider.model.MessageState;
 import br.com.magalu.labs.communication.dataprovider.model.MessageType;
 import br.com.magalu.labs.communication.dataprovider.repository.MessageRepository;
 import br.com.magalu.labs.communication.exception.CreateMessageFailException;
+import br.com.magalu.labs.communication.exception.DelectedMessageFailException;
+import br.com.magalu.labs.communication.exception.NotFoundMessageException;
 import br.com.magalu.labs.communication.service.destination.DestinationService;
 import br.com.magalu.labs.communication.service.message.imp.MessageServiceImp;
 import br.com.magalu.labs.communication.service.rabbitmq.RabbitMqService;
@@ -16,10 +18,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.BDDMockito;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.*;
 
 
@@ -42,10 +46,10 @@ class MessageServiceUnitTest {
 
     @Test
     void shouldSaveMessageAndReturnId(){
-        BDDMockito.given(messageRepository.save(any(Message.class)))
+        given(messageRepository.save(any(Message.class)))
                 .willReturn(getMockMessageSceneryNumberTwo());
 
-        BDDMockito.given(destinationService.create(any(String.class)))
+        given(destinationService.create(any(String.class)))
                 .willReturn(Optional.of(getMockMessageSceneryNumberTwo().getDestination()));
 
         final Message message = messageService.create(getMockMessageSceneryNumberOne());
@@ -56,10 +60,10 @@ class MessageServiceUnitTest {
 
     @Test
     void shouldSaveMessageAndReturnStateScheduled(){
-        BDDMockito.given(messageRepository.save(any(Message.class)))
+        given(messageRepository.save(any(Message.class)))
                 .willReturn(getMockMessageSceneryNumberTwo());
 
-        BDDMockito.given(destinationService.create(any(String.class)))
+        given(destinationService.create(any(String.class)))
                 .willReturn(Optional.of(getMockMessageSceneryNumberTwo().getDestination()));
 
         final Message message = messageService.create(getMockMessageSceneryNumberOne());
@@ -72,10 +76,10 @@ class MessageServiceUnitTest {
     @Test
     void shouldDeleteMessageAndReturnMessageStateDeleted(){
 
-        BDDMockito.given(messageRepository.findById(ID))
+        given(messageRepository.findById(ID))
                 .willReturn(Optional.of(getMockMessageSceneryNumberOne()));
 
-        BDDMockito.given(messageRepository.save(getMockMessageSceneryNumberOne()))
+        given(messageRepository.save(getMockMessageSceneryNumberOne()))
                 .willReturn(getMockMessageSceneryNumberOne());
 
 
@@ -89,15 +93,55 @@ class MessageServiceUnitTest {
 
     }
 
+    @Test
+    void shouldFindByIdAndReturnMessage(){
+        given(messageRepository.findById(anyLong()))
+                .willReturn(Optional.of(getMockMessageSceneryNumberOne()));
+
+        Message message = messageService.findById(ID);
+        assertNotNull(message);
+    }
+
+    @Test
+    void shouldFindAllAndReturnListMessage(){
+        given(messageRepository.findAll())
+                .willReturn(List.of(getMockMessageSceneryNumberOne()));
+
+        List<Message> messages = messageService.findAll();
+        assertNotNull(messages);
+    }
+
+    @Test
+    void shouldFindByIdAndReturnException(){
+        given(messageRepository.findById(anyLong()))
+                .willReturn(Optional.empty());
+
+        assertThatThrownBy(() -> messageService.findById(ID))
+                .isInstanceOf(NotFoundMessageException.class);
+    }
+
+
+    @Test
+    void shouldDeleteMessageAndReturnException(){
+
+        given(messageRepository.findById(any(Long.class)))
+                .willReturn(Optional.empty());
+
+
+        given(messageRepository.save(any(Message.class)))
+                .willReturn(getMockMessageSceneryNumberOne());
+
+        assertThatThrownBy(() -> messageService.deleteById(ID))
+                .isInstanceOf(DelectedMessageFailException.class);
+    }
 
     @Test
     void shouldCreateMessageAndReturnException(){
-       // Optional option = spy(Optional.class);
 
-        BDDMockito.given(messageRepository.save(any(Message.class)))
+        given(messageRepository.save(any(Message.class)))
                 .willReturn(getMockMessageSceneryNumberTwo());
 
-        BDDMockito.given(destinationService.create(any(String.class)))
+        given(destinationService.create(any(String.class)))
                 .willReturn(Optional.empty());
 
         assertThatThrownBy(() -> messageService.create(getMockMessageSceneryNumberOne()))

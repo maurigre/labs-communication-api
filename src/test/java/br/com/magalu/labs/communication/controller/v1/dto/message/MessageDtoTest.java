@@ -40,6 +40,27 @@ class MessageDtoTest {
     }
 
     @Test
+    void shouldHashCodeAttributes(){
+        MessageDto messageDto = MessageDto.builder().build();
+        assertEquals(1244954382, messageDto.hashCode());
+
+        messageDto.setDateTime(DATE_TIME);
+        assertEquals(1235765124, messageDto.hashCode());
+
+        messageDto.setDestiny(DESTINY);
+        assertEquals(-1198304654, messageDto.hashCode());
+
+        messageDto.setMessage(MESSAGE);
+        assertEquals(1168118610, messageDto.hashCode());
+
+        messageDto.setType(TYPE);
+        assertEquals(1172967820, messageDto.hashCode());
+
+        messageDto.setState(STATE);
+        assertEquals(-853553830, messageDto.hashCode());
+    }
+
+    @Test
     void shouldToString(){
         StringBuilder messageDtoToString = new StringBuilder();
         messageDtoToString.append("MessageDto(dateTime=").append(DATE_TIME.toString()).append(", ");
@@ -106,6 +127,12 @@ class MessageDtoTest {
     }
 
     @Test
+    void shouldCompareTwoMessageDtoOneNullAndReturnFalse(){
+        MessageDto mockMessageDto = getMockMessageDto();
+        assertEquals(false, mockMessageDto.equals(null));
+    }
+
+    @Test
     void shouldCompareAttributeTypeInBetweenTwoMessageDtoAndReturnFalse(){
         MessageDto mockMessageDto = getMockMessageDto();
         mockMessageDto.setType(MessageType.EMAIL.name());
@@ -129,11 +156,13 @@ class MessageDtoTest {
     void shouldCompareTwoMessageDtoAndReturnTrue(){
         MessageDto mockMessageDto = getMockMessageDto();
         assertEquals(true, mockMessageDto.equals(getMockMessageDto()));
+        assertEquals(true, mockMessageDto.equals(mockMessageDto));
     }
 
     @Test
     void shouldCompareTwoObjectsAndReturnFalse(){
         MessageDto messageDtoTwo = MessageDto.builder().build();
+        assertEquals(false, messageDtoTwo.equals(new String()));
         assertNotEquals(messageDtoTwo, getMockMessageDto());
     }
 

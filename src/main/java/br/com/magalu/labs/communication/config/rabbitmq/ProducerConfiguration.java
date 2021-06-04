@@ -15,7 +15,6 @@ import java.util.Map;
 @Configuration
 public class ProducerConfiguration {
 
-    @Getter
     @Value("${spring.rabbitmq.request.queue.producer}")
     private String queue;
 
@@ -34,35 +33,35 @@ public class ProducerConfiguration {
 
     @Bean
     DirectExchange exchange(){
-        return new DirectExchange(exchange);
+        return new DirectExchange(getExchange());
     }
 
     @Bean
     Queue deadLetter(){
-        return new Queue(deadLetter);
+        return new Queue(getDeadLetter());
     }
 
 
     @Bean
     Queue queue(){
         Map<String, Object> args = new HashMap<>();
-        args.put("x-dead-letter-exchange", exchange);
-        args.put("x-dead-letter-routing-key", deadLetter);
-        return new Queue(routing, true , false, false, args);
+        args.put("x-dead-letter-exchange", getExchange());
+        args.put("x-dead-letter-routing-key", getDeadLetter());
+        return new Queue(getRouting(), true , false, false, args);
     }
 
     @Bean
     public Binding bindingQueue(){
         return BindingBuilder.bind(queue())
                 .to(exchange())
-                .with(routing);
+                .with(getRouting());
     }
 
     @Bean
     public Binding bindingDeadLetter(){
         return BindingBuilder.bind(deadLetter())
                 .to(exchange())
-                .with(deadLetter);
+                .with(getDeadLetter());
     }
 
 }

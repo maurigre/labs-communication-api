@@ -5,7 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class RabbitMqServiceUnitTest {
 
@@ -19,8 +20,17 @@ class RabbitMqServiceUnitTest {
     }
 
     @Test
-    void shouldSendMessageForProducerRabbitMqAndReturnException(){
+    void shouldSendMessageForProducerRabbitMqVoidMethodAndThrowException(){
+        doThrow(new RuntimeException())
+                .when(rabbitTemplate).convertAndSend(any());
+        rabbitMqService.producer(any());
 
+    }
+
+    @Test
+    void shouldSendMessageForProducerRabbitMqVoidMethodAndNotThrowException(){
+        rabbitMqService.producer(any());
+        verify(rabbitTemplate).convertAndSend(any());
     }
 
 

@@ -18,7 +18,9 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@ValidateTypeMessageForDestiny(valueFieldType="type", valueFieldDestiny="destiny")
+@ValidateTypeMessageForDestiny(
+        valueFieldType="type",
+        valueFieldDestiny="destiny")
 public class MessageDto extends RepresentationModel<MessageDto> {
 
     @ApiModelProperty(
@@ -30,7 +32,6 @@ public class MessageDto extends RepresentationModel<MessageDto> {
     @NotNull(message = "Data hora não pode ser null")
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", locale = "en-US", timezone = "Brazil/East")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC-3")
     private LocalDateTime dateTime;
 

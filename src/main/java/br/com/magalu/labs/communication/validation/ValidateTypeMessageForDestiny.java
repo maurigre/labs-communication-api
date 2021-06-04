@@ -13,7 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = {ValidateTypeMessageForDestinyValidator.class})
 public @interface ValidateTypeMessageForDestiny {
 
-    String message() default "Campo type conflita com dados do campo destiny";
+    String message() default "{TypeMessageForDestiny.divergent}";
 
     Class<?>[] groups() default { };
 

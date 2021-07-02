@@ -3,9 +3,10 @@ package br.com.magalu.labs.communication.controller.v1.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
-@Builder
 @Getter
+@ToString
 @AllArgsConstructor
 public class ResponseErrorValidField {
 

@@ -1,17 +1,16 @@
 package br.com.magalu.labs.communication.controller.v1.dto.response;
 
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@Data
+@Getter
 @SuperBuilder
+@ToString
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = false)
 public class ResponseErrorValid  extends ResponseError{
 
     private final String objectName;

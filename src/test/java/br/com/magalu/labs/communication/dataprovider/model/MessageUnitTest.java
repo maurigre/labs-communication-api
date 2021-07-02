@@ -1,6 +1,7 @@
 package br.com.magalu.labs.communication.dataprovider.model;
 
 
+import br.com.magalu.labs.communication.controller.v1.dto.message.MessageDto;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +28,46 @@ class MessageUnitTest {
             LocalDateTime.of(2021,04,15,
             18,22,01);
 
+
+
+    @Test
+    void shouldHashCode(){
+        Message message = Message.builder().build();
+        assertEquals(102, message.hashCode());
+    }
+
+    @Test
+    void shouldHashCodeAttributes(){
+        Message message = Message.builder().id(ID).build();
+        assertEquals(60, message.hashCode());
+    }
+
+    @Test
+    void shouldCompareTwoMessageOneMessageAndReturnTrue(){
+        Message message = Message.builder().id(ID).build();
+        assertEquals(true, message.equals(message));
+    }
+
+    @Test
+    void shouldCompareTwoMessageOneMessageAndReturnFalse(){
+        Message message = Message.builder().id(ID).build();
+        assertEquals(false, message.equals(MessageDto.builder().build()));
+    }
+
+    @Test
+    public void testEqualsSymmetric() {
+        Message x = Message.builder().id(ID).build();
+        Message y = Message.builder().id(ID).build();
+        assertTrue(x.equals(y) && y.equals(x));
+        assertTrue(x.hashCode() == y.hashCode());
+    }
+
+
+    @Test
+    void shouldCompareTwoMessageOneNullAndReturnFalse(){
+        Message message = Message.builder().build();
+        assertEquals(false, message.equals(null));
+    }
 
     @Test
     void shouldCreateMessageForBuild(){
@@ -137,6 +178,24 @@ class MessageUnitTest {
         assertEquals("Message(id=1, dateTimeSchedule=2021-04-14T17:44, destination=Destination(id=1, destiny=teste@teste.com.br), message=Mensagem de teste, messageType=EMAIL, messageState=SCHEDULED, createdAt=2021-04-14T17:44, modifiedAt=2021-04-15T18:22:01)", message.toString());
 
     }
+
+    @Test
+    void shouldMessageBuilderToString(){
+
+        assertEquals("Message.MessageBuilder(id=1, dateTimeSchedule=2021-04-14T17:44, destination=Destination(id=1, destiny=teste@teste.com.br), message=Mensagem de teste, messageType=EMAIL, messageState=SCHEDULED, createdAt=2021-04-14T17:44, modifiedAt=2021-04-15T18:22:01)",
+                Message.builder()
+                .id(ID)
+                .dateTimeSchedule(DATE_TIME_SHEDULE)
+                .destination(DESTINATION)
+                .message(MESSAGE)
+                .messageType(MESSAGE_TYPE)
+                .messageState(MESSAGE_STATE)
+                .createdAt(CREATED_AT)
+                .modifiedAt(MODIFIED_AT)
+                .toString());
+
+    }
+
 
 
 }

@@ -1,29 +1,13 @@
-package br.com.magalu.labs.communication.controller.v1.dto.message;
+package br.com.maurireis.labs.communication.controller.v1.dto.message;
 
-import br.com.magalu.labs.communication.dataprovider.model.Destination;
-import br.com.magalu.labs.communication.dataprovider.model.Message;
-import br.com.magalu.labs.communication.dataprovider.model.MessageState;
-import br.com.magalu.labs.communication.dataprovider.model.MessageType;
-import br.com.magalu.labs.communication.validation.DateTimeMessage;
-import br.com.magalu.labs.communication.validation.ValidateTypeMessageForDestiny;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.mysql.cj.protocol.MessageSender;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Data;
-import org.apache.tomcat.util.descriptor.web.MessageDestination;
+import br.com.maurireis.labs.communication.dataprovider.model.MessageState;
+import br.com.maurireis.labs.communication.dataprovider.model.MessageType;
 import org.junit.jupiter.api.Test;
-import org.springframework.hateoas.RepresentationModel;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class MessageDtoTest {
 

@@ -1,7 +1,6 @@
 package br.com.maurireis.labs.communication.controller.v1.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;

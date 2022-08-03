@@ -1,7 +1,8 @@
 package br.com.maurireis.labs.communication.controller.v1.dto.response;
 
 
-import lombok.*;
+import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 

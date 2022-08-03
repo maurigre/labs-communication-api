@@ -4,22 +4,17 @@ import br.com.maurireis.labs.communication.controller.v1.dto.message.MessageDto;
 import br.com.maurireis.labs.communication.dataprovider.model.MessageType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import javax.validation.ConstraintValidatorFactory;
 import javax.validation.ConstraintViolation;
-import javax.validation.Payload;
 import javax.validation.ValidationException;
-import java.lang.annotation.Annotation;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import static org.apache.coyote.http11.Constants.a;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.spy;
 
 @ValidateTypeMessageForDestiny(valueFieldType = "type", valueFieldDestiny = "destiny")
 class ValidateTypeMessageForDestinyValidatorUnitTest {

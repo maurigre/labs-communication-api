@@ -1,4 +1,4 @@
-package br.com.magalu.labs.communication.service.message;
+package br.com.maurireis.labs.communication.service.message;
 
 
 import br.com.maurireis.labs.communication.dataprovider.model.Destination;
@@ -6,22 +6,24 @@ import br.com.maurireis.labs.communication.dataprovider.model.Message;
 import br.com.maurireis.labs.communication.dataprovider.model.MessageState;
 import br.com.maurireis.labs.communication.dataprovider.model.MessageType;
 import br.com.maurireis.labs.communication.dataprovider.repository.MessageRepository;
+import br.com.maurireis.labs.communication.exception.CreateMessageFailException;
+import br.com.maurireis.labs.communication.exception.DelectedMessageFailException;
+import br.com.maurireis.labs.communication.exception.NotFoundMessageException;
 import br.com.maurireis.labs.communication.service.destination.DestinationService;
 import br.com.maurireis.labs.communication.service.message.imp.MessageServiceImp;
 import br.com.maurireis.labs.communication.service.rabbitmq.RabbitMqService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.BDDMockito;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 
 
 class MessageServiceUnitTest {

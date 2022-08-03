@@ -2,7 +2,6 @@ package br.com.maurireis.labs.communication.dataprovider.model;
 
 
 import br.com.maurireis.labs.communication.controller.v1.dto.message.MessageDto;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

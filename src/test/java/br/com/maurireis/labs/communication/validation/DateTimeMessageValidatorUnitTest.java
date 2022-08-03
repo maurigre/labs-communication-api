@@ -1,15 +1,13 @@
-package br.com.magalu.labs.communication.validation;
+package br.com.maurireis.labs.communication.validation;
 
-import br.com.magalu.labs.communication.controller.v1.dto.message.MessageDto;
+import br.com.maurireis.labs.communication.controller.v1.dto.message.MessageDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.spy;
 
 class DateTimeMessageValidatorUnitTest {
 
